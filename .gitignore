@@ -1,0 +1,37 @@
+###########
+## Common 
+###########
+*.bak
+ignore/
+
+###############
+## Windows BS
+###############
+Thumbs.db
+Desktop.in
+
+###########
+## Mac BS
+###########
+.DS_Store
+
+###########################
+## IDE / Text Editor Stuff 
+###########################
+./php53.cgi
+*.sublime-workspace
+.phpintel
+
+####################
+## Grunt/Gulp Stuff
+####################
+.sass-cache
+node_modules/
+
+########################
+# Compiled Gulp Files
+########################
+assets/js/app.js
+assets/js/lib.js
+assets/css/
+assets/img/fpo/

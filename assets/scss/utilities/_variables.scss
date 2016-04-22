@@ -1,0 +1,36 @@
+/*-------------------------------------------------------*\
+    Variables
+/*-------------------------------------------------------*/
+
+$base-font-size : 16px;
+
+/*	Grid
+--------------------------------------------------------*/
+
+$grid-width: 1000px;
+$default-float: left;
+
+$columns: 12 !default;
+$column-width: 65px !default;
+$gutter-width: 10px !default;
+
+// Basic or Advanced usage
+$advanced-usage: false !default;
+
+
+/* Breakpoints */
+$medium-break: em(669px);
+$large-break: em(1025px);  
+
+/*	Colors
+--------------------------------------------------------*/
+
+$primary-color: #ff9c08 !default;
+$secondary-color: #444444 !default;
+
+
+/* Panels 
+--------------------------------------------------------*/
+
+$panel-color: #efefef;
+$panel-padding: 15px;
