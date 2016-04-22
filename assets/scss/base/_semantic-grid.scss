@@ -1,0 +1,234 @@
+/*-------------------------------------------------------*\
+    Semantic Grid
+/*-------------------------------------------------------*/
+
+
+@mixin box-sizing($box) {
+    @include prefix(box-sizing, $box, webkit moz spec);
+}
+@mixin mobilefix {
+    @include respond(all-phones) {
+        &:before, &:after {
+            content: " ";
+            display: table;
+        }
+        &:after {
+            clear: both;
+        }
+        &:last-child {
+            float: none;
+        }
+    }
+}
+@mixin respond($media) {
+    @if $media == portrait-phones {
+        @media only screen and (max-width: $min-device-width) {
+            @content;
+        }
+    }
+    @else if $media == landscape-phones {
+        @media only screen and (min-width: breakpoint($min-device-width)) and (max-width: breakpoint($medium-break)) {
+            @content;
+        }
+    }
+    @else if $media == all-phones {
+        @media only screen and (max-width: breakpoint($medium-break)) {
+            @content;
+        }
+    }
+    @else if $media == portrait-tablets {
+        @media only screen and (max-width: $medium-break) {
+            @content;
+        }
+    }
+    @else if $media == tablets {
+        @media only screen and (min-width: $medium-break) and (max-width: $document-width - 1) {
+            @content;
+        }
+    }
+    @else if $media == desktop {
+        @media only screen and (min-width: $medium-break) {
+            @content;
+        }
+    }
+    @else if $media == document-width {
+        @media only screen and (max-width: $document-width + 20) {
+            @content;
+        }
+    }
+    @else if $media == large-screens {
+        @media only screen and (min-width: $grid-width) {
+            @content;
+        }
+    }
+    @else if $media == print {
+        @media print {
+            @content;
+        }
+    }
+    @else {
+        @media only screen and ("#{$media}") {
+            @content;
+        }
+    }
+}
+// Gumby Semantic Grid Mixin //
+// Mixin for rows
+@mixin row($nested: false) {
+    @if $nested == nested {
+        @include nestedRow;
+    }
+    @else {
+        width: 100%;
+        max-width: $grid-width;
+        // min-width: $min-device-width;
+        margin: 0 auto;
+        padding-left: 0;
+        padding-right: 0;
+        @extend %clearfix;
+    }
+    > *:first-child {
+        left: 0;
+    }
+    @include respond(all-phones) {
+        width: auto;
+        min-width: 0;
+        left: 0;
+        margin-right: 0;
+    }
+}
+// Mixin for rows that are nested within columns
+@mixin nestedRow {
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+    @extend %clearfix;
+}
+@mixin col($cols: $columns, $sm-cols: $columns, $alignment: false, $behavior: false, $hybrid: false) {
+    @extend %columnconfig;
+    width: percentage($sm-cols,$columns);
+    @include break-at($medium-break) {
+        width: percentage($cols,$columns);
+    }
+    @if $alignment == center {
+        float: none;
+        padding-left: auto !important;
+        padding-right: auto !important;
+        margin: 0 auto;
+        @include respond(all-phones) {
+            @extend .col;
+        }
+    }
+    @else if $behavior == collapse {
+        @extend %collapse;
+        @include respond(all-phones) {
+            @extend .col;
+        }
+    }
+    @else {
+        @include respond(all-phones) {
+            @extend .col;
+        }
+    }
+}
+@mixin hybrid($columns: $columns, $alignment: false, $behavior: false) {
+    @include column($columns, $alignment, $behavior, true);
+}
+@mixin push($columns, $hybrid-grid: false) {
+    @if $hybrid-grid == hybrid {
+        left: push_x($columns, false, true);
+        &:first-child {
+            left: push_x($columns, true, true);
+        }
+        @include respond(all-phones) {
+            left: 0;
+            &:first-child {
+                left: 0;
+            }
+        }
+    }
+    @else {
+        left: push_x($columns);
+        &:first-child {
+            left: push_x($columns, true);
+        }
+        @include respond(all-phones) {
+            left: 0;
+            &:first-child {
+                left: 0;
+            }
+        }
+    }
+}
+@mixin pull($direction: false, $columns: 0, $width: 0, $hybrid-grid: false) {
+    @if $direction == left {
+        @extend %pull-left;
+        @if $columns > 0 and $width > 0 {
+            @if $hybrid-grid == hybrid {
+                left: pull_x($columns, $width, true);
+                &:first-child {
+                    left: 0;
+                }
+            }
+            @else {
+                left: pull_x($columns, $width);
+                &:first-child {
+                    left: 0;
+                }
+            }
+        }
+    }
+    @else if $direction == none {
+        @extend %pull-none;
+    }
+    @else {
+        @extend %pull-right;
+    }
+}
+// Placeholders for the Semantic Grid
+%container {
+    padding: 0 $gutter-width;
+    @include respond(all-phones) {
+        min-width: 0;
+        left: 0;
+        margin-right: 0;
+    }
+}
+// Clearfix placeholder
+%clearfix {
+    @include clearfix;
+}
+// Clearfix placeholder for mobile
+%mobilefix {
+    @include mobilefix;
+}
+// Row placeholders
+%row {
+    @include row;
+}
+%nestedrow {
+    @include row;
+}
+// Column Configuration placeholder
+%columnconfig {
+    left: $gutter-width;
+    float: $default-float;
+    min-height: 1px;
+    position: relative;
+    @include box-sizing(border-box);
+}
+%pull-right {
+    float: right;
+}
+%pull-left {
+    float: left;
+}
+%pull-none {
+    float: none;
+}
+// Collapse Gutters
+%collapse {
+    left: 0;
+}
